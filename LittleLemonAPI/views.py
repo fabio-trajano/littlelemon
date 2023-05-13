@@ -2,12 +2,13 @@ from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.views import APIView
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 from .models import MenuItem, Category, Cart, Order
 from django.contrib.auth.models import User, Group
 from .serializers import MenuItemSerializer, CategorySerializer, CartSerializer, OrderSerializer, GroupSerializer, UserSerializer
 
 class GroupsView(generics.ListCreateAPIView):
+    throttle_classes = [AnonRateThrottle, UserRateThrottle]
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
@@ -32,6 +33,7 @@ class CategoriesView(generics.ListCreateAPIView):
     serializer_class = CategorySerializer
 
 class MenuItemsView(generics.ListCreateAPIView):
+    throttle_classes = [AnonRateThrottle, UserRateThrottle]
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
 
